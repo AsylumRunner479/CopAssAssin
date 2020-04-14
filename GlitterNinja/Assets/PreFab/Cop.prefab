@@ -183,6 +183,8 @@ GameObject:
   m_Component:
   - component: {fileID: 376182355589510582}
   - component: {fileID: 1405511812508261088}
+  - component: {fileID: 6093393118993844997}
+  - component: {fileID: 2117533232688166655}
   m_Layer: 0
   m_Name: Cop
   m_TagString: Untagged
@@ -222,10 +224,45 @@ MonoBehaviour:
   moveSpeed: 5
   rotateSpeed: 5
   walkSpeed: 5
+  runSpeed: 0
   rigid: {fileID: 5983698048942193093}
   player: {fileID: 3556957354379426385}
   _charC: {fileID: 5280238250903342650}
   self: {fileID: 376182355589510585}
+  anim: {fileID: 5712642426095391608}
+--- !u!114 &6093393118993844997
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 376182355589510585}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sceneId: 0
+  serverOnly: 0
+  m_AssetId: 
+--- !u!114 &2117533232688166655
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 376182355589510585}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2f74aedd71d9a4f55b3ce499326d45fb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  syncMode: 0
+  syncInterval: 0.1
+  clientAuthority: 1
+  localPositionSensitivity: 0.01
+  localRotationSensitivity: 0.01
+  localScaleSensitivity: 0.01
 --- !u!95 &376182354932135639
 Animator:
   serializedVersion: 3
@@ -758,7 +795,7 @@ CharacterController:
   m_StepOffset: 0.3
   m_SkinWidth: 0.08
   m_MinMoveDistance: 0.001
-  m_Center: {x: 0, y: 0, z: 0}
+  m_Center: {x: 0, y: 1, z: 0}
 --- !u!95 &5712642426095391608
 Animator:
   serializedVersion: 3
@@ -790,9 +827,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 37ece78276c95c64e95dc248c72cb798, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  maxHealth: 0
-  curHealth: 0
-  healRate: 0
+  maxHealth: 10
+  curHealth: 10
+  healRate: 5
   grad:
     serializedVersion: 2
     key0: {r: 1, g: 1, b: 1, a: 1}
@@ -850,6 +887,16 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 376182355589510582}
     m_Modifications:
+    - target: {fileID: -7123455587666697121, guid: 8d571a75afac060418ff6eb5f90f418d,
+        type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: -7123455587666697121, guid: 8d571a75afac060418ff6eb5f90f418d,
+        type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: -4216859302048453862, guid: 8d571a75afac060418ff6eb5f90f418d,
         type: 3}
       propertyPath: m_LocalPosition.x
@@ -937,12 +984,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8d571a75afac060418ff6eb5f90f418d, type: 3}
---- !u!4 &4630477863293181378 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: 8d571a75afac060418ff6eb5f90f418d,
-    type: 3}
-  m_PrefabInstance: {fileID: 376182354932135640}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &8510003179280183249 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: -927199367670048503, guid: 8d571a75afac060418ff6eb5f90f418d,
@@ -958,6 +999,12 @@ Transform:
 --- !u!1 &807541889693047858 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1012325621861788394, guid: 8d571a75afac060418ff6eb5f90f418d,
+    type: 3}
+  m_PrefabInstance: {fileID: 376182354932135640}
+  m_PrefabAsset: {fileID: 0}
+--- !u!4 &4630477863293181378 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: -4216859302048453862, guid: 8d571a75afac060418ff6eb5f90f418d,
     type: 3}
   m_PrefabInstance: {fileID: 376182354932135640}
   m_PrefabAsset: {fileID: 0}

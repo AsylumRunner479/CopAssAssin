@@ -1,8 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
-public class MouseLook : MonoBehaviour
+public class MouseLook : NetworkBehaviour
 {
     public enum RotationalAxis
     {
@@ -34,22 +35,26 @@ public class MouseLook : MonoBehaviour
 
     private void Update()
     {
-        if (!PlayerHandler.isDead)
+        if (hasAuthority)
         {
-            // If axis movement is X (the player left and rght)
-            if (axis == RotationalAxis.MouseX)
+            if (!PlayerHandler.isDead)
             {
-                //Change rotation of X Axis
-                transform.Rotate(0, Input.GetAxis("Mouse X") * sensitivity * Time.deltaTime, 0);
-            }
-            else // otherwise axis movement is Y (up/down look)
-            {
+                // If axis movement is X (the player left and rght)
+                if (axis == RotationalAxis.MouseX)
+                {
+                    //Change rotation of X Axis
+                    transform.Rotate(0, Input.GetAxis("Mouse X") * sensitivity * Time.deltaTime, 0);
+                }
+                else // otherwise axis movement is Y (up/down look)
+                {
 
-                _rotY += Input.GetAxis("Mouse Y") * sensitivity * Time.deltaTime;
-                _rotY = Mathf.Clamp(_rotY, minY, maxY);
-                transform.localEulerAngles = new Vector3(-_rotY, 0, 0);
+                    _rotY += Input.GetAxis("Mouse Y") * sensitivity * Time.deltaTime;
+                    _rotY = Mathf.Clamp(_rotY, minY, maxY);
+                    transform.localEulerAngles = new Vector3(-_rotY, 0, 0);
+                }
             }
         }
+       
     }
 
 }

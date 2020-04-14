@@ -1,13 +1,13 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
+using Mirror;
 
-
-public class Movement : MonoBehaviour
+public class Movement : NetworkBehaviour
 {
     [Header("Speed Vars")]
     //value Variables
     public float moveSpeed, rotateSpeed;
-    public float walkSpeed;
+    public float walkSpeed, runSpeed;
     public Rigidbody rigid;
     //Struct - Contains Multiple Variables (eg...3 floats)
     private Vector3 _moveDir;
@@ -15,7 +15,7 @@ public class Movement : MonoBehaviour
     public PlayerHandler player;
     public CharacterController _charC;
     public GameObject self;
-
+    public Animator anim;
 
     private void Start()
     {
@@ -25,10 +25,14 @@ public class Movement : MonoBehaviour
 
 
     }
-
+    [Client]
     private void Update()
     {
-        Move();
+        if (hasAuthority)
+        {
+            Move();
+        }
+        
 
     }
 
@@ -37,20 +41,40 @@ public class Movement : MonoBehaviour
         if (!PlayerHandler.isDead)
         {
             //set speed
+            
+            
 
-
-
-
-            moveSpeed = walkSpeed;
+            
 
 
             if (Input.GetAxis("Horizontal") == 0 && Input.GetAxis("Vertical") == 0)
             {
-
+                anim.SetBool("Walk", false);
+                anim.SetBool("Run", false);
             }
             else if (!(Input.GetAxis("Horizontal") == 0 && Input.GetAxis("Vertical") == 0))
             {
-
+                if (Input.GetButton("e"))
+                {
+                    moveSpeed = runSpeed;
+                    anim.SetBool("Run", true);
+                    anim.SetBool("Walk", false);
+                    anim.SetBool("Crouch", false);
+                }
+                else if (Input.GetButton("q"))
+                {
+                    moveSpeed = 0;
+                    anim.SetBool("Walk", false);
+                    anim.SetBool("Run", false);
+                    anim.SetBool("Crouch", true);
+                }
+                else
+                {
+                    moveSpeed = walkSpeed;
+                    anim.SetBool("Walk", true);
+                    anim.SetBool("Run", false);
+                    anim.SetBool("Crouch", false);
+                }
             }
             _moveDir = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")) * moveSpeed;
             rigid.AddForce(_moveDir);
