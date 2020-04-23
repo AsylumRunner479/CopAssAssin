@@ -28,6 +28,8 @@ public class Movement : NetworkBehaviour
     [Client]
     private void Update()
     {
+        
+        
         if (hasAuthority)
         {
             Move();
