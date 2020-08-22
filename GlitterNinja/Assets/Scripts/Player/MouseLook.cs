@@ -1,9 +1,9 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Mirror;
 
-public class MouseLook : NetworkBehaviour
+
+public class MouseLook : MonoBehaviour
 {
     public enum RotationalAxis
     {
@@ -35,8 +35,7 @@ public class MouseLook : NetworkBehaviour
 
     private void Update()
     {
-        if (hasAuthority)
-        {
+        
             if (!PlayerHandler.isDead)
             {
                 // If axis movement is X (the player left and rght)
@@ -53,7 +52,7 @@ public class MouseLook : NetworkBehaviour
                     transform.localEulerAngles = new Vector3(-_rotY, 0, 0);
                 }
             }
-        }
+        
        
     }
 

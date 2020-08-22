@@ -1,9 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using Mirror;
 
-public class SimpleShoot : NetworkBehaviour
+public class SimpleShoot : MonoBehaviour
 {
 
     public GameObject bulletPrefab;
@@ -23,13 +22,12 @@ public class SimpleShoot : NetworkBehaviour
 
     void Update()
     {
-        if (hasAuthority)
-        {
+
             if (Input.GetButtonDown("Fire1"))
             {
                 GetComponent<Animator>().SetTrigger("Fire");
             }
-        }
+        
         
     }
 

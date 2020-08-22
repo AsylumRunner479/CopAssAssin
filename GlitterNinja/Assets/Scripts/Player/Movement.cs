@@ -1,8 +1,8 @@
 ﻿using UnityEngine;
 using UnityEngine.UI;
-using Mirror;
 
-public class Movement : NetworkBehaviour
+
+public class Movement : MonoBehaviour
 {
     [Header("Speed Vars")]
     //value Variables
@@ -25,15 +25,13 @@ public class Movement : NetworkBehaviour
 
 
     }
-    [Client]
+
     private void Update()
     {
         
-        
-        if (hasAuthority)
-        {
+       
             Move();
-        }
+    
         
 
     }
@@ -56,14 +54,14 @@ public class Movement : NetworkBehaviour
             }
             else if (!(Input.GetAxis("Horizontal") == 0 && Input.GetAxis("Vertical") == 0))
             {
-                if (Input.GetButton("e"))
+                if (Input.GetKeyDown("e"))
                 {
                     moveSpeed = runSpeed;
                     anim.SetBool("Run", true);
                     anim.SetBool("Walk", false);
                     anim.SetBool("Crouch", false);
                 }
-                else if (Input.GetButton("q"))
+                else if (Input.GetKeyDown("q"))
                 {
                     moveSpeed = 0;
                     anim.SetBool("Walk", false);

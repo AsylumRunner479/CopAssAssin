@@ -90,8 +90,6 @@ GameObject:
   - component: {fileID: 4042899262355950}
   - component: {fileID: 95136851146926780}
   - component: {fileID: 114258639798283212}
-  - component: {fileID: 8790108190677690741}
-  - component: {fileID: 1143157562898808191}
   m_Layer: 0
   m_Name: Handgun_M1911A_Black (WithScript)
   m_TagString: Untagged
@@ -147,8 +145,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6be84e4d7829855419c06b94e56bd135, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
   bulletPrefab: {fileID: 1900734910723676, guid: 67c3c990b6c48af469e31db314977502,
     type: 3}
   casingPrefab: {fileID: 1482960508195586, guid: 91dcfdffdc6d38e47916b9c549e26dac,
@@ -158,37 +154,6 @@ MonoBehaviour:
   barrelLocation: {fileID: 4284830639736152}
   casingExitLocation: {fileID: 4915251581735220}
   shotPower: 750
---- !u!114 &8790108190677690741
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1267841715524440}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b91ecbcc199f4492b9a91e820070131, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  sceneId: 0
-  serverOnly: 0
-  m_AssetId: 
---- !u!114 &1143157562898808191
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1267841715524440}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cac0b327466df784782ba86be748b3a6, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  componentsToDisable:
-  - {fileID: 114258639798283212}
 --- !u!1 &1407596302488856
 GameObject:
   m_ObjectHideFlags: 0
