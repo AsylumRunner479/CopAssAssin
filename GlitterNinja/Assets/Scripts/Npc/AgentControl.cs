@@ -7,7 +7,7 @@ public class AgentControl : MonoBehaviour
     public Transform[] home;
     public NavMeshAgent agent;
     public GameObject[] SpawnPoints;
-    public int health = 100;
+    public float health = 100;
     private int points;
     public GameObject self;
     
@@ -51,7 +51,7 @@ public class AgentControl : MonoBehaviour
         points = (points + 1) % home.Length;
         
     }
-    public void DamageNPC(int damage)
+    public void DamageNPC(float damage)
     {
         health -= damage;
         if (health <= 0)
