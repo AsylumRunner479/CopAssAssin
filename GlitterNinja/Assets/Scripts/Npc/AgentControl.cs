@@ -10,7 +10,7 @@ public class AgentControl : MonoBehaviour
     public float health = 100;
     private int points;
     public GameObject self;
-    private float run;
+    private float run,death = 100;
     public Animator anim;
     // Start is called before the first frame update
     void Start()
@@ -92,6 +92,16 @@ public class AgentControl : MonoBehaviour
             if (!agent.pathPending && agent.remainingDistance < 4f)
             {
                 GoToNextPoint();
+            }
+        }
+        else
+        {
+            death -= Time.deltaTime;
+            if (death <= 0)
+            {
+                SpawnManager.SpawnCount -= 1;
+                Destroy(self);
+                
             }
         }
     }
