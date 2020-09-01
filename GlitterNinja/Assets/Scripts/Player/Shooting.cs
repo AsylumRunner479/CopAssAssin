@@ -6,7 +6,7 @@ public class Shooting : MonoBehaviour
 {
     public float damage, range, attackSpeed, attackRate;
     public Camera cam;
-    //public LayerMask enemy;
+    public LayerMask enemy;
     public ParticleSystem bullets;
     
     // Update is called once per frame
@@ -34,12 +34,13 @@ public class Shooting : MonoBehaviour
     void Shoot()
     {
         RaycastHit hit;
-        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit))
+        if (Physics.Raycast(cam.transform.position, cam.transform.forward, out hit, float.MaxValue, enemy))
         {
             AgentControl enemy = hit.transform.GetComponent<AgentControl>();
 
             if (enemy != null)
             {
+                Debug.Log("Dying", hit.transform);
                 enemy.DamageNPC(damage);
 
             }

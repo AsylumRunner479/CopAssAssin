@@ -10,7 +10,8 @@ public class AgentControl : MonoBehaviour
     public float health = 100;
     private int points;
     public GameObject self;
-    
+    private float run;
+    public Animator anim;
     // Start is called before the first frame update
     void Start()
     {
@@ -23,7 +24,7 @@ public class AgentControl : MonoBehaviour
         Ragdoll(true);
         Collider(false);
         GoToNextPoint();
-        
+        run = Random.Range(-100, 100);
     }
     void Ragdoll(bool state)
     {
@@ -62,15 +63,36 @@ public class AgentControl : MonoBehaviour
     void Die()
     {
         GetComponent<Animator>().enabled = false;
+        GetComponent<NavMeshAgent>().enabled = false;
         Ragdoll(false);
         Collider(true);
     }
     // Update is called once per frame
     void Update()
     {
-        if (!agent.pathPending && agent.remainingDistance < 4f)
+        run += Time.deltaTime / 10;
+        if (run >= 100)
         {
-            GoToNextPoint();
+            run = -100;
+        }
+        if (run >= 0)
+        {
+            anim.SetBool("walk", false);
+            agent.speed = 7f;
+        }
+        else
+        {
+            anim.SetBool("walk", true);
+            agent.speed = 3.5f;
+        }
+        if (health > 0)
+        {
+
+
+            if (!agent.pathPending && agent.remainingDistance < 4f)
+            {
+                GoToNextPoint();
+            }
         }
     }
 }
