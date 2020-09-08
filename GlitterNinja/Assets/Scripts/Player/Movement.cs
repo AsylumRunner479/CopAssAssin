@@ -13,13 +13,13 @@ public class Movement : MonoBehaviour
     private Vector3 _moveDir;
     //Reference Variable
     public PlayerHandler player;
-    public CharacterController _charC;
+    //public CharacterController _charC;
     public GameObject self;
     public Animator anim;
 
     private void Start()
     {
-        _charC = GetComponent<CharacterController>();
+        //_charC = GetComponent<CharacterController>();
 
 
 
@@ -77,7 +77,7 @@ public class Movement : MonoBehaviour
                 }
             }
             _moveDir = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical")) * moveSpeed;
-            rigid.AddForce(_moveDir);
+            rigid.AddForce(_moveDir * Time.deltaTime);
             Vector3 newDirection = Vector3.RotateTowards(transform.forward, _moveDir, rotateSpeed, 0.0f);
             self.transform.rotation = Quaternion.LookRotation(newDirection);
 
@@ -91,7 +91,7 @@ public class Movement : MonoBehaviour
 
 
 
-        _charC.Move(_moveDir * Time.deltaTime);
+        //_charC.Move(_moveDir * Time.deltaTime);
     }
 
 }

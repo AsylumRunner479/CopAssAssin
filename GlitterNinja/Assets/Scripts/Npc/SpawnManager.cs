@@ -19,7 +19,7 @@ public class SpawnManager : MonoBehaviour
     void Update()
     {
         //timer -= Time.deltaTime * 25;
-        if (SpawnCount <= 479)
+        if (SpawnCount <= 49)
         {
             
             

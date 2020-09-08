@@ -4,14 +4,15 @@ using UnityEngine;
 using UnityEngine.UI;
 public class PlayerMovement : MonoBehaviour
 {
-    public CharacterController controller;
+    //public CharacterController controller;
+    public Rigidbody rigid;
     public float speed = 12f;
     Vector3 velocity;
     public float gravity = -9.81f;
     public float jumpHeight = 10f;
     public float maxhealth, curHealth, ammoCount, totalAmmo;
     public Slider health, ammo;
-    
+    private bool grounded;
     #region Game Mode
     [SerializeField] int playersTeamID;
     public int TeamID { get { return playersTeamID; } }
@@ -61,9 +62,24 @@ public class PlayerMovement : MonoBehaviour
             SwitchWeapon(lastWeapon, true);
         }
     }
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.tag == "ground")
+        {
+            grounded = true;
+        }
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.tag == "ground")
+        {
+            grounded = false;
+        }
+    }
     // Update is called once per frame
     void Update()
     {
+       
         if (health.value != curHealth/maxhealth)
         {
             health.value = curHealth / maxhealth;
@@ -73,7 +89,7 @@ public class PlayerMovement : MonoBehaviour
             ammo.value = ammoCount / totalAmmo;
         }
         
-        if (controller.isGrounded && velocity.y < 0)
+        if (grounded && velocity.y < 0)
         {
             velocity.y = -2f;
         }
@@ -82,13 +98,13 @@ public class PlayerMovement : MonoBehaviour
         float z = Input.GetAxis("Vertical");
 
         Vector3 move = transform.right * x + transform.forward * z;
-        controller.Move(move * speed * Time.deltaTime);
-        if (Input.GetKeyDown(KeyCode.J) && controller.isGrounded)
+        rigid.AddForce(move * speed * Time.deltaTime);
+        if (Input.GetKeyDown(KeyCode.J) && grounded)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
         velocity.y += gravity * Time.deltaTime;
-        controller.Move(velocity * Time.deltaTime);
+        rigid.AddForce(velocity * Time.deltaTime);
     }
     public bool IsHolding(int weaponID)
     {
