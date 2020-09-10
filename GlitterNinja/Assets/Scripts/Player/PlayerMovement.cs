@@ -94,17 +94,22 @@ public class PlayerMovement : MonoBehaviour
             velocity.y = -2f;
         }
 
-        float x = Input.GetAxis("Horizontal");
-        float z = Input.GetAxis("Vertical");
+        velocity.x = Input.GetAxis("Horizontal");
+        velocity.z = Input.GetAxis("Vertical");
 
-        Vector3 move = transform.right * x + transform.forward * z;
-        rigid.AddForce(move * speed * Time.deltaTime);
+        
+        
         if (Input.GetKeyDown(KeyCode.J) && grounded)
         {
             velocity.y = Mathf.Sqrt(jumpHeight * -2f * gravity);
         }
         velocity.y += gravity * Time.deltaTime;
         rigid.AddForce(velocity * Time.deltaTime);
+    }
+    private void FixedUpdate()
+    {
+        Vector3 move = transform.right * velocity.x + transform.forward * velocity.z;
+        rigid.AddForce(move * speed * 10);
     }
     public bool IsHolding(int weaponID)
     {
