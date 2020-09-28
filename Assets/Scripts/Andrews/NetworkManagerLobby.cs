@@ -8,179 +8,185 @@ using UnityEngine.Experimental.XR;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-public class NetworkManagerLobby : NetworkManager
+namespace MirroeMPlayer
 {
-    [SerializeField] private int minPlayers = 2;
-    [Scene][SerializeField] private string menuScene = string.Empty;
-
-    [Header("Room")]
-    [SerializeField] private NetworkRoomPlayer roomPlayerPrefab = null;
-
-    [Header("Game")]
-    [SerializeField] private NetworkGamePlayer gamePlayerPrefab = null;
-    [SerializeField] private GameObject playerSpawnSystem = null;
-
-    public event Action onClientConnected;
-    public event Action onClientDisconnected;
-    public static event Action<NetworkConnection> onServerReadied;
-
-    public List<NetworkRoomPlayer> RoomPlayers { get; } = new List<NetworkRoomPlayer>();
-    public List<NetworkGamePlayer> GamePlayers { get; } = new List<NetworkGamePlayer>();
-
-    public override void OnStartServer()
+    public class NetworkManagerLobby : NetworkManager
     {
-        spawnPrefabs = Resources.LoadAll<GameObject>("SpawnablePrefabs").ToList<GameObject>();
-    }
+        [SerializeField] private int minPlayers = 2;
+        [Scene] [SerializeField] private string menuScene = string.Empty;
 
-    public override void OnStartClient()
-    {
-        var spawnablePrefabs = Resources.LoadAll<GameObject>("SpawnablePrefabs");
+        [Header("Room")]
+        [SerializeField] private NetworkRoomPlayer roomPlayerPrefab = null;
 
-        foreach(var prefab in spawnablePrefabs)
+        [Header("Game")]
+        [SerializeField] private NetworkGamePlayer gamePlayerPrefab = null;
+        [SerializeField] private GameObject playerSpawnSystem = null;
+
+        public event Action onClientConnected;
+        public event Action onClientDisconnected;
+        public static event Action<NetworkConnection> onServerReadied;
+
+        public List<NetworkRoomPlayer> RoomPlayers { get; } = new List<NetworkRoomPlayer>();
+        public List<NetworkGamePlayer> GamePlayers { get; } = new List<NetworkGamePlayer>();
+
+        public override void OnStartServer()
         {
-            ClientScene.RegisterPrefab(prefab);
-        }
-    }
-
-    public override void OnClientConnect(NetworkConnection conn)
-    {
-        base.OnClientConnect(conn);
-
-        onClientConnected?.Invoke();
-    }
-
-    public override void OnClientDisconnect(NetworkConnection conn)
-    {
-        base.OnClientDisconnect(conn);
-
-        onClientDisconnected?.Invoke();
-    }
-
-    public override void OnServerConnect(NetworkConnection conn)
-    {
-        if(numPlayers >= maxConnections)
-        {
-            conn.Disconnect();
-            return;
+            spawnPrefabs = Resources.LoadAll<GameObject>("SpawnablePrefabs").ToList();
         }
 
-        //only if we want people to join only in the lobby
-        if(SceneManager.GetActiveScene().path != menuScene)
+        public override void OnStartClient()
         {
-            conn.Disconnect();
-            return;
-        }
-    }
+            //normally we should run the method from the base/parent class
+            //but the OnStartClient() from Network Manager is empty;
+            //base.OnStartClient();
+            var spawnablePrefabs = Resources.LoadAll<GameObject>("SpawnablePrefabs");
 
-    public override void OnServerAddPlayer(NetworkConnection conn)
-    {
-        if (SceneManager.GetActiveScene().path == menuScene)
-        {
-            bool isLeader = RoomPlayers.Count == 0;
-
-            NetworkRoomPlayer roomPlayerInstance = Instantiate(roomPlayerPrefab);
-
-            roomPlayerInstance.IsLeader = isLeader;
-
-            NetworkServer.AddPlayerForConnection(conn, roomPlayerInstance.gameObject);
-        }
-    }
-
-
-    public override void OnServerDisconnect(NetworkConnection conn)
-    {
-        if(conn.identity != null)
-        {
-            NetworkRoomPlayer player = conn.identity.GetComponent<NetworkRoomPlayer>();
-
-            RoomPlayers.Remove(player);
-
-            NotifyPlayersOfReadyState();
-        }
-
-        base.OnServerDisconnect(conn);
-    }
-
-    public override void OnStopServer()
-    {
-        RoomPlayers.Clear();
-    }
-
-    public void NotifyPlayersOfReadyState()
-    {
-        foreach (var player in RoomPlayers)
-        {
-            player.HandleReadyToStart(IsReadyToStart());
-        }
-    }
-
-    private bool IsReadyToStart()
-    {
-        if(numPlayers < minPlayers)
-        {
-            return false;
-        }
-
-        foreach(var player in RoomPlayers)
-        {
-            if(!player.IsReady)
+            foreach (var prefab in spawnablePrefabs)
             {
-                return false;
+                ClientScene.RegisterPrefab(prefab);
             }
         }
 
-        return true;
-    }
-
-
-    public override void OnServerReady(NetworkConnection conn)
-    {
-        base.OnServerReady(conn);
-
-        onServerReadied?.Invoke(conn);
-    }
-
-    public void StartGame()
-    {
-        if(SceneManager.GetActiveScene().path == menuScene)
+        public override void OnClientConnect(NetworkConnection conn)
         {
-            if(!IsReadyToStart())
+            base.OnClientConnect(conn);
+
+            onClientConnected?.Invoke();
+        }
+
+        public override void OnClientDisconnect(NetworkConnection conn)
+        {
+            base.OnClientDisconnect(conn);
+
+            onClientDisconnected?.Invoke();
+        }
+
+        public override void OnServerConnect(NetworkConnection conn)
+        {
+            if (numPlayers >= maxConnections)
             {
+                conn.Disconnect();
                 return;
             }
 
-            ServerChangeScene("Game_Map_01");
-        }
-    }
-
-    
-    public override void ServerChangeScene(string newSceneName)
-    {
-        //from menu to game
-        if(SceneManager.GetActiveScene().path == menuScene && newSceneName.StartsWith("Game_Map"))
-        {
-            for(int i = RoomPlayers.Count -1; i >= 0; i--)
+            //only if we want people to join only in the lobby
+            if (SceneManager.GetActiveScene().path != menuScene)
             {
-                var conn = RoomPlayers[i].connectionToClient;
-                NetworkGamePlayer gamePlayerInstance = Instantiate(gamePlayerPrefab);
-                gamePlayerInstance.SetDisplayName(RoomPlayers[i].DisplayName);
+                conn.Disconnect();
+                return;
+            }
+        }
 
-                NetworkServer.Destroy(conn.identity.gameObject);
+        public override void OnServerAddPlayer(NetworkConnection conn)
+        {
+            if (SceneManager.GetActiveScene().name == MenuScene)
+            {
+                bool isLeader = RoomPlayers.Count == 0;
 
-                NetworkServer.ReplacePlayerForConnection(conn, gamePlayerInstance.gameObject, true);
+                NetworkRoomPlayer roomPlayerInstance = Instantiate(roomPlayerPrefab);
+
+                roomPlayerInstance.IsLeader = isLeader;
+
+                NetworkServer.AddPlayerForConnection(conn, roomPlayerInstance.gameObject);
             }
         }
 
 
-        base.ServerChangeScene(newSceneName);
-    }
-
-    public override void OnServerSceneChanged(string sceneName)
-    {
-        if (sceneName.StartsWith("Game_Map"))
+        public override void OnServerDisconnect(NetworkConnection conn)
         {
-            GameObject playerSpawnSystemInstance = Instantiate(playerSpawnSystem);
-            NetworkServer.Spawn(playerSpawnSystemInstance);
+            if (conn.identity != null)
+            {
+                NetworkRoomPlayer player = conn.identity.GetComponent<NetworkRoomPlayer>();
+
+                RoomPlayers.Remove(player);
+
+                NotifyPlayersOfReadyState();
+            }
+
+            base.OnServerDisconnect(conn);
+        }
+
+        public override void OnStopServer()
+        {
+            RoomPlayers.Clear();
+        }
+
+        public void NotifyPlayersOfReadyState()
+        {
+            foreach (var player in RoomPlayers)
+            {
+                player.HandleReadyToStart(IsReadyToStart());
+            }
+        }
+
+        private bool IsReadyToStart()
+        {
+            if (numPlayers < minPlayers)
+            {
+                return false;
+            }
+
+            foreach (var player in RoomPlayers)
+            {
+                if (!player.IsReady)
+                {
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+
+        public override void OnServerReady(NetworkConnection conn)
+        {
+            base.OnServerReady(conn);
+
+            onServerReadied?.Invoke(conn);
+        }
+
+        public void StartGame()
+        {
+            if (SceneManager.GetActiveScene().path == menuScene)
+            {
+                if (!IsReadyToStart())
+                {
+                    return;
+                }
+
+                ServerChangeScene("Game_Map_01");
+            }
+        }
+
+
+        public override void ServerChangeScene(string newSceneName)
+        {
+            //from menu to game
+            if (SceneManager.GetActiveScene().path == menuScene && newSceneName.StartsWith("Game_Map"))
+            {
+                for (int i = RoomPlayers.Count - 1; i >= 0; i--)
+                {
+                    var conn = RoomPlayers[i].connectionToClient;
+                    NetworkGamePlayer gamePlayerInstance = Instantiate(gamePlayerPrefab);
+                    gamePlayerInstance.SetDisplayName(RoomPlayers[i].DisplayName);
+
+                    NetworkServer.Destroy(conn.identity.gameObject);
+
+                    NetworkServer.ReplacePlayerForConnection(conn, gamePlayerInstance.gameObject, true);
+                }
+            }
+
+
+            base.ServerChangeScene(newSceneName);
+        }
+
+        public override void OnServerSceneChanged(string sceneName)
+        {
+            if (sceneName.StartsWith("Game_Map"))
+            {
+                GameObject playerSpawnSystemInstance = Instantiate(playerSpawnSystem);
+                NetworkServer.Spawn(playerSpawnSystemInstance);
+            }
         }
     }
 }
