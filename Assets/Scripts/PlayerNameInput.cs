@@ -2,13 +2,14 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.UI;
 
 namespace MirrorMPlayer
 {
     public class PlayerNameInput : MonoBehaviour
     {
         [Header("UI")]
-        [SerializeField] private TMP_Inputfield nameInputField = null;
+        [SerializeField] private TMP_InputField nameInputField = null;
         [SerializeField] private Button continueButton = null;
 
         public static string DisplayName { get; private set; }
@@ -18,7 +19,7 @@ namespace MirrorMPlayer
         private void Start() => SetUpInputField();
         private void SetUpInputField()
         {
-            if (!PlayerPrefsNameKey.HasKey(PlayerPrefsNameKey))
+            if (!PlayerPrefs.HasKey(PlayerPrefsNameKey))
             {
                 return;
             }
@@ -30,7 +31,7 @@ namespace MirrorMPlayer
         }
         public void SetPlayerName(string Name)
         {
-            continueButton.intractable = !string.IsNullOrEmpty(name);
+            continueButton.interactable = !string.IsNullOrEmpty(name);
         }
     }
 }

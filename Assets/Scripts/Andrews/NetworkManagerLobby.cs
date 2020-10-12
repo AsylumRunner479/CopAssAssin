@@ -79,7 +79,7 @@ namespace MirrorMPlayer
 
         public override void OnServerAddPlayer(NetworkConnection conn)
         {
-            if (SceneManager.GetActiveScene().name == MenuScene)
+            if (SceneManager.GetActiveScene().name == "MenuScene")
             {
                 bool isLeader = RoomPlayers.Count == 0;
 

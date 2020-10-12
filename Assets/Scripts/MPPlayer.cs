@@ -3,32 +3,35 @@ using System.Collections.Generic;
 using UnityEngine;
 using Mirror;
 
-public class MPPlayer : NetworkBehaviour
+namespace MirrorMPlayer
 {
-    [SerializeField] private Vector3 movement = new Vector3();
-    
-    [Client]
-    // Update is called once per frame
-    void Update()
+    public class MPPlayer : NetworkBehaviour
     {
-        if (!Authority)
-        {
-            return;
-        }
+        [SerializeField] private Vector3 movement = new Vector3();
 
-        if (Input.GetKeyDown(Keycode.Space))
+        [Client]
+        // Update is called once per frame
+        void Update()
         {
-            CmdMove();
+            if (!hasAuthority)
+            {
+                return;
+            }
+
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                CmdMove();
+            }
         }
-    }
-    [Command]
-    private void CmdMove()
-    {
-        RpcMove();
-    }
-    [ClientRpc]
-    private void RpcMove()
-    {
-        transform.Translate(movement);
+        [Command]
+        private void CmdMove()
+        {
+            RpcMove();
+        }
+        [ClientRpc]
+        private void RpcMove()
+        {
+            transform.Translate(movement);
+        }
     }
 }

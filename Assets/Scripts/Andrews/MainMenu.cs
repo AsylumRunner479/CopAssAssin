@@ -5,7 +5,7 @@ using Mirror;
 
 namespace MirrorMPlayer
 { 
-    public class MainMenu : NetworkBehaviour
+    public class MainMenu : MonoBehaviour
     {
         [SerializeField] private NetworkManagerLobby networkManager = null;
 
