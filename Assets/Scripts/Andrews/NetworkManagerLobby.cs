@@ -8,7 +8,7 @@ using UnityEngine.Experimental.XR;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
-namespace MirroeMPlayer
+namespace MirrorMPlayer
 {
     public class NetworkManagerLobby : NetworkManager
     {

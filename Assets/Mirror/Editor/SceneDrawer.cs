@@ -1,7 +1,8 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace Mirror
+ namespace MirrorMPlayer
+
 {
     [CustomPropertyDrawer(typeof(SceneAttribute))]
     public class SceneDrawer : PropertyDrawer

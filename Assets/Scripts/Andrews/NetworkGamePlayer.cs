@@ -5,41 +5,44 @@ using Mirror;
 using TMPro;
 using UnityEngine.UI;
 
-public class NetworkGamePlayer : NetworkBehaviour
+namespace MirrorMPlayer
 {
-    [SyncVar]
-    private string displayName = "Loading...";
-
-    private NetworkManagerLobby room;
-    private NetworkManagerLobby Room
+    public class NetworkGamePlayer : NetworkBehaviour
     {
-        get
+        [SyncVar]
+        private string displayName = "Loading...";
+
+        private NetworkManagerLobby room;
+        private NetworkManagerLobby Room
         {
-            if( room != null)
+            get
             {
+                if (room != null)
+                {
+                    return room;
+                }
+                room = NetworkManager.singleton as NetworkManagerLobby;
                 return room;
             }
-            room = NetworkManager.singleton as NetworkManagerLobby;
-            return room;
         }
+
+        public override void OnStartClient()
+        {
+            DontDestroyOnLoad(gameObject);
+
+            Room.GamePlayers.Add(this);
+        }
+
+        public override void OnNetworkDestroy()
+        {
+            Room.GamePlayers.Remove(this);
+        }
+
+        [Server]
+        public void SetDisplayName(string displayName)
+        {
+            this.displayName = displayName;
+        }
+
     }
-
-    public override void OnStartClient()
-    {
-        DontDestroyOnLoad(gameObject);
-
-        Room.GamePlayers.Add(this);
-    }
-
-    public override void OnNetworkDestroy()
-    {
-        Room.GamePlayers.Remove(this);
-    }
-
-    [Server]
-    public void SetDisplayName(string displayName)
-    {
-        this.displayName = displayName;
-    }
-
 }

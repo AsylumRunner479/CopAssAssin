@@ -2,31 +2,35 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
-public class PlayerNameInput : MonoBehaviour
+
+namespace MirrorMPlayer
 {
-    [Header("UI")]
-    [SerializeField] private TMP_Inputfield nameInputField = null;
-    [SerializeField] private Button continueButton = null;
-
-    public static string DisplayName { get; private set; }
-
-    private const string PlayerPrefsNameKey = "PlayerName";
-
-    private void Start() => SetUpInputField();
-    private void SetUpInputField()
+    public class PlayerNameInput : MonoBehaviour
     {
-        if (!PlayerPrefsNameKey.HasKey(PlayerPrefsNameKey))
+        [Header("UI")]
+        [SerializeField] private TMP_Inputfield nameInputField = null;
+        [SerializeField] private Button continueButton = null;
+
+        public static string DisplayName { get; private set; }
+
+        private const string PlayerPrefsNameKey = "PlayerName";
+
+        private void Start() => SetUpInputField();
+        private void SetUpInputField()
         {
-            return;
-        }
-        
-        string defaultName = PlayerPrefs.GetString(PlayerPrefsNameKey);
+            if (!PlayerPrefsNameKey.HasKey(PlayerPrefsNameKey))
+            {
+                return;
+            }
 
-        nameInputField.text = defaultName;
-        SetPlayerName(default);
-    }
-    public void SetPlayerName(string Name)
-    {
-        continueButton.intractable = !string.IsNullOrEmpty(name);
+            string defaultName = PlayerPrefs.GetString(PlayerPrefsNameKey);
+
+            nameInputField.text = defaultName;
+            SetPlayerName(default);
+        }
+        public void SetPlayerName(string Name)
+        {
+            continueButton.intractable = !string.IsNullOrEmpty(name);
+        }
     }
 }

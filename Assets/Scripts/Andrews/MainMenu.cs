@@ -1,32 +1,36 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
-public class MainMenu : MonoBehaviour
-{
-    [SerializeField] private NetworkManagerLobby networkManager = null;
-
-    [Header("UI")]
-    [SerializeField] private GameObject landingPagePanel = null;
-
-    public void Start()
+namespace MirrorMPlayer
+{ 
+    public class MainMenu : NetworkBehaviour
     {
-        if(networkManager == null)
+        [SerializeField] private NetworkManagerLobby networkManager = null;
+
+        [Header("UI")]
+        [SerializeField] private GameObject landingPagePanel = null;
+
+        public void Start()
         {
-            Debug.LogError("networkManager not attached to MainMenu");
+            if (networkManager == null)
+            {
+                Debug.LogError("networkManager not attached to MainMenu");
+            }
+
+            if (landingPagePanel == null)
+            {
+                Debug.LogError("landingPagePanel not attached to MainMenu");
+            }
         }
 
-        if(landingPagePanel == null)
+        public void HostLobby()
         {
-            Debug.LogError("landingPagePanel not attached to MainMenu");
+            networkManager.StartHost();
+
+            landingPagePanel.SetActive(false);
         }
+
     }
-
-    public void HostLobby()
-    {
-        networkManager.StartHost();
-
-        landingPagePanel.SetActive(false);
-    }
-
 }

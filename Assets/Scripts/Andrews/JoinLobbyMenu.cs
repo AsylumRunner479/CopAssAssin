@@ -4,67 +4,70 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class JoinLobbyMenu : MonoBehaviour
+namespace MirrorMPlayer
 {
-    [SerializeField] private NetworkManagerLobby networkManager = null;
-
-    [Header("UI")]
-    [SerializeField] private GameObject landingPagePanel = null;
-    [SerializeField] private TMP_InputField ipAddressInputField = null;
-    [SerializeField] private Button joinButton = null;
-
-    public void Start()
+    public class JoinLobbyMenu : MonoBehaviour
     {
-        if(networkManager == null)
+        [SerializeField] private NetworkManagerLobby networkManager = null;
+
+        [Header("UI")]
+        [SerializeField] private GameObject landingPagePanel = null;
+        [SerializeField] private TMP_InputField ipAddressInputField = null;
+        [SerializeField] private Button joinButton = null;
+
+        public void Start()
         {
-            Debug.LogError("networkManager is not attached to JoinLobbyMenu");
+            if (networkManager == null)
+            {
+                Debug.LogError("networkManager is not attached to JoinLobbyMenu");
+            }
+            if (landingPagePanel == null)
+            {
+                Debug.LogError("landingPagePanel is not attached to JoinLobbyMenu");
+            }
+            if (ipAddressInputField == null)
+            {
+                Debug.LogError("ipAddressInputField is not attached to JoinLobbyMenu");
+            }
+            if (joinButton == null)
+            {
+                Debug.LogError("joinButton is not attached to JoinLobbyMenu");
+            }
         }
-        if (landingPagePanel == null)
+
+        private void OnEnable()
         {
-            Debug.LogError("landingPagePanel is not attached to JoinLobbyMenu");
+            networkManager.onClientConnected += HandleClientConnected;
+            networkManager.onClientDisconnected += HandleClientDisconnected;
         }
-        if (ipAddressInputField == null)
+
+        private void OnDisable()
         {
-            Debug.LogError("ipAddressInputField is not attached to JoinLobbyMenu");
+            networkManager.onClientConnected -= HandleClientConnected;
+            networkManager.onClientDisconnected -= HandleClientDisconnected;
         }
-        if (joinButton == null)
+
+        public void JoinLobby()
         {
-            Debug.LogError("joinButton is not attached to JoinLobbyMenu");
+            string ipAddress = ipAddressInputField.text;
+
+            networkManager.networkAddress = ipAddress;
+            networkManager.StartClient();
+
+            joinButton.interactable = false;
         }
-    }
 
-    private void OnEnable()
-    {
-        networkManager.onClientConnected += HandleClientConnected;
-        networkManager.onClientDisconnected += HandleClientDisconnected;
-    }
+        private void HandleClientConnected()
+        {
+            joinButton.interactable = true;
 
-    private void OnDisable()
-    {
-        networkManager.onClientConnected -= HandleClientConnected;
-        networkManager.onClientDisconnected -= HandleClientDisconnected;
-    }
+            gameObject.SetActive(false);
+            landingPagePanel.SetActive(false);
+        }
 
-    public void JoinLobby()
-    {
-        string ipAddress = ipAddressInputField.text;
-
-        networkManager.networkAddress = ipAddress;
-        networkManager.StartClient();
-
-        joinButton.interactable = false;
-    }
-
-    private void HandleClientConnected()
-    {
-        joinButton.interactable = true;
-
-        gameObject.SetActive(false);
-        landingPagePanel.SetActive(false);
-    }
-
-    private void HandleClientDisconnected()
-    {
-        joinButton.interactable = true;
+        private void HandleClientDisconnected()
+        {
+            joinButton.interactable = true;
+        }
     }
 }
