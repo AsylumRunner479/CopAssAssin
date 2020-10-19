@@ -11,8 +11,8 @@ namespace MirrorMPlayer
     {
         [Header("UI")]
         [SerializeField] private GameObject lobbyUI = null;
-        [SerializeField] private TMP_Text[] playerNameTexts = new TMP_Text[4];
-        [SerializeField] private TMP_Text[] playerReadyTexts = new TMP_Text[4];
+        [SerializeField] private Text[] playerNameTexts = new Text[4];
+        [SerializeField] private Text[] playerReadyTexts = new Text[4];
         [SerializeField] private Button startGameButton = null;
 
 
@@ -61,7 +61,7 @@ namespace MirrorMPlayer
             UpdateDisplay();
         }
 
-        public override void OnNetworkDestroy()
+        public override void OnStopClient()
         {
             Room.RoomPlayers.Remove(this);
             UpdateDisplay();
@@ -79,11 +79,11 @@ namespace MirrorMPlayer
 
         private void UpdateDisplay()
         {
-            if (!hasAuthority)
+            if (!isLocalPlayer)
             {
                 foreach (var player in Room.RoomPlayers)
                 {
-                    if (player.hasAuthority)
+                    if (player.isLocalPlayer)
                     {
                         player.UpdateDisplay();
                         break;
@@ -121,7 +121,7 @@ namespace MirrorMPlayer
         [Command]
         private void CmdSetDisplayName(string displayName)
         {
-            DisplayName = displayName;
+            this.DisplayName = displayName;
         }
 
         [Command]

@@ -33,7 +33,7 @@ namespace MirrorMPlayer
             Room.GamePlayers.Add(this);
         }
 
-        public override void OnNetworkDestroy()
+        public override void  OnStopClient()
         {
             Room.GamePlayers.Remove(this);
         }

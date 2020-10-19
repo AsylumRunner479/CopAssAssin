@@ -22,7 +22,7 @@ namespace MirrorMPlayer
             Gizmos.color = Color.blue;
             Gizmos.DrawSphere(transform.position, 0.3f);
             Gizmos.color = Color.red;
-            Gizmos.DrawLine(transform.position, transform.position + transform.forward * 1f);
+            Gizmos.DrawLine(transform.position, transform.position + transform.forward * 2);
         }
     }
 }
